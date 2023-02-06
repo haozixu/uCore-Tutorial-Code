@@ -8,6 +8,7 @@
 
 int load_init_app();
 int bin_loader(struct inode *, struct proc *);
+int elf_loader(struct inode *, struct proc *, uint64 *p_entry);
 
 #define BASE_ADDRESS (0x1000)
 #define USTACK_SIZE (PAGE_SIZE)

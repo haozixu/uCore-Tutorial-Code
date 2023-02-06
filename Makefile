@@ -128,7 +128,8 @@ debug: build/kernel .gdbinit $(F)/fs-copy.img
 	sleep 1
 	$(GDB)
 
-CHAPTER ?= $(shell git rev-parse --abbrev-ref HEAD | grep -oP 'ch\K[0-9]')
+# CHAPTER ?= $(shell git rev-parse --abbrev-ref HEAD | grep -oP 'ch\K[0-9]')
+CHAPTER = 8
 
 user:
 	make -C user CHAPTER=$(CHAPTER) BASE=$(BASE)

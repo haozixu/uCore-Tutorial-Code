@@ -392,13 +392,28 @@ int exec(char *path, char **argv)
 		errorf("invalid file name %s\n", path);
 		return -1;
 	}
+
+	// TODO: check ELF
+	// if (...) {
+	// 	errorf("invalid executable %s", path);
+	// 	return -1;
+	// }
+
 	// free current main thread's ustack and trapframe
 	struct thread *t = curr_thread();
 	freethread(t);
 	t->state = T_UNUSED;
 	uvmunmap(p->pagetable, 0, p->max_page, 1);
-	bin_loader(ip, p);
+	
+	uint64 entry;
+	if (elf_loader(ip, p, &entry) != 0)
+		panic("TODO: make this recoverable");
 	iput(ip);
+
+	// TODO: might need more consideration
+	int tid = allocthread(p, entry, 1);
+	if (p->threads + tid != t)
+		panic("TODO: refactor? split allocthread into alloc+init");
 	t->state = RUNNING;
 	return push_argv(p, argv);
 }
